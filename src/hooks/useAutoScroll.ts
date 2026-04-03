@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 export function useAutoScroll<T extends HTMLElement>(deps: unknown[]) {
   const ref = useRef<T>(null)
   const [isAtBottom, setIsAtBottom] = useState(true)
+  const rafRef = useRef<number | undefined>(undefined)
 
   useEffect(() => {
     const el = ref.current
@@ -14,19 +15,24 @@ export function useAutoScroll<T extends HTMLElement>(deps: unknown[]) {
       setIsAtBottom(atBottom)
     }
 
-    el.addEventListener('scroll', handleScroll)
+    el.addEventListener('scroll', handleScroll, { passive: true })
     return () => el.removeEventListener('scroll', handleScroll)
   }, [])
 
   useEffect(() => {
     if (isAtBottom && ref.current) {
-      ref.current.scrollTop = ref.current.scrollHeight
+      if (rafRef.current !== undefined) cancelAnimationFrame(rafRef.current)
+      rafRef.current = requestAnimationFrame(() => {
+        if (ref.current) {
+          ref.current.scrollTop = ref.current.scrollHeight
+        }
+      })
     }
   }, deps)
 
   const scrollToBottom = () => {
     if (ref.current) {
-      ref.current.scrollTop = ref.current.scrollHeight
+      ref.current.scrollTo({ top: ref.current.scrollHeight, behavior: 'smooth' })
     }
   }
 

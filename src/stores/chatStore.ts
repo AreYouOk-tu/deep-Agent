@@ -16,7 +16,7 @@ interface ChatState {
   addConversation: (conversation: Conversation) => void
   setMessages: (messages: Message[]) => void
   addMessage: (message: Message) => void
-  updateLastMessage: (content: string) => void
+  updateLastMessage: (patch: Partial<Pick<Message, 'content' | 'thinking' | 'reasoning' | 'status' | 'error'>>) => void
   setIsStreaming: (streaming: boolean) => void
 }
 
@@ -37,12 +37,12 @@ export const useChatStore = create<ChatState>((set) => ({
   setMessages: (messages) => set({ messages }),
   addMessage: (message) =>
     set((state) => ({ messages: [...state.messages, message] })),
-  updateLastMessage: (content) =>
+  updateLastMessage: (patch) =>
     set((state) => {
       const messages = [...state.messages]
       const last = messages[messages.length - 1]
       if (last && last.role === 'assistant') {
-        messages[messages.length - 1] = { ...last, content }
+        messages[messages.length - 1] = { ...last, ...patch }
       }
       return { messages }
     }),

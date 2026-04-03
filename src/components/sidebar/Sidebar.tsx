@@ -31,7 +31,20 @@ export function Sidebar() {
   })
 
   useEffect(() => {
-    if (convData) setConversations(convData)
+    if (!convData || !currentAgent) return
+    setConversations(convData)
+    const state = useChatStore.getState()
+    if (state.currentConversation) return
+    if (convData.length > 0) {
+      setCurrentConversation(convData[0])
+    } else {
+      // 该 agent 没有历史对话，自动创建一条
+      createConversation(currentAgent.id).then((conv) => {
+        addConversation(conv)
+        setCurrentConversation(conv)
+        setMessages([])
+      })
+    }
   }, [convData])
 
   const handleNewConversation = async () => {
@@ -42,7 +55,8 @@ export function Sidebar() {
     setMessages([])
   }
 
-  const handleSelectAgent = (agent: Agent) => {
+  const handleSelectAgent = async (agent: Agent) => {
+    if (agent.id === currentAgent?.id) return
     setCurrentAgent(agent)
     setCurrentConversation(null)
     setMessages([])
@@ -50,12 +64,10 @@ export function Sidebar() {
 
   return (
     <aside className="w-72 flex flex-col h-full bg-white border-r border-gray-200">
-      {/* Header */}
       <div className="p-4 border-b border-gray-100">
         <h1 className="text-lg font-bold text-gray-900">AI Agent</h1>
       </div>
 
-      {/* Agents */}
       <div className="p-3 border-b border-gray-100">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-1">Agents</p>
         <div className="space-y-1">
@@ -77,7 +89,6 @@ export function Sidebar() {
         </div>
       </div>
 
-      {/* Conversations */}
       <div className="flex-1 flex flex-col overflow-hidden p-3">
         <div className="flex items-center justify-between mb-2 px-1">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">History</p>
@@ -103,9 +114,6 @@ export function Sidebar() {
               <span className="text-sm truncate">{conv.title}</span>
             </button>
           ))}
-          {conversations.length === 0 && currentAgent && (
-            <p className="text-xs text-gray-400 text-center py-4">No conversations yet</p>
-          )}
         </div>
       </div>
     </aside>

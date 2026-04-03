@@ -7,11 +7,17 @@ export interface Agent {
   createdAt: string
 }
 
+export type MessageStatus = 'thinking' | 'reasoning' | 'streaming' | 'done' | 'error'
+
 export interface Message {
   id: string
   conversationId: string
   role: 'user' | 'assistant'
   content: string
+  thinking?: string
+  reasoning?: string
+  status?: MessageStatus
+  error?: string
   timestamp: string
   attachments?: Attachment[]
 }
@@ -33,7 +39,9 @@ export interface Conversation {
   createdAt: string
 }
 
-export interface StreamChunk {
+export type StreamEventType = 'thinking' | 'reasoning' | 'content' | 'error' | 'done'
+
+export interface StreamEvent {
+  type: StreamEventType
   content: string
-  done: boolean
 }

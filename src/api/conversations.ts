@@ -2,10 +2,9 @@ import type { Conversation } from '@/types'
 
 export const mockConversations: Conversation[] = [
   {
-    id: 'conv-1',
+    id: 'conv-default',
     agentId: '1',
-    title: 'Getting Started',
-    lastMessage: 'How can I help you today?',
+    title: 'New Chat',
     lastMessageTime: new Date().toISOString(),
     createdAt: new Date().toISOString(),
   },
@@ -23,7 +22,7 @@ export async function createConversation(agentId: string): Promise<Conversation>
   const newConv: Conversation = {
     id: `conv-${Date.now()}`,
     agentId,
-    title: 'New Conversation',
+    title: 'New Chat',
     lastMessageTime: new Date().toISOString(),
     createdAt: new Date().toISOString(),
   }
