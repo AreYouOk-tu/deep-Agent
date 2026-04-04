@@ -12,10 +12,14 @@
   "dependencies": {
     "@tanstack/react-query": "^5.96.1",
     "autoprefixer": "^10.4.27",
+    "axios": "^1.7.9",
+    "fabric": "^5.3.0",
+    "lodash-es": "^4.17.21",
     "lucide-react": "^1.7.0",
     "postcss": "^8.5.8",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-dropzone": "^14.3.5",
     "tailwindcss": "^3.4.19",
     "zustand": "^5.0.12"
   },

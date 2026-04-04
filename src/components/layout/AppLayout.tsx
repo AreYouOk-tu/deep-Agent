@@ -1,10 +1,15 @@
 import { Menu, X } from 'lucide-react'
 import { useUIStore } from '@/stores/uiStore'
+import { useChatStore } from '@/stores/chatStore'
 import { Sidebar } from '@/components/sidebar/Sidebar'
 import { ChatWindow } from '@/components/chat/ChatWindow'
+import { EditorLayout } from '@/components/editor/EditorLayout'
 
 export function AppLayout() {
   const { sidebarOpen, toggleSidebar, setSidebarOpen } = useUIStore()
+  const currentAgent = useChatStore((s) => s.currentAgent)
+
+  const isImageEditor = currentAgent?.type === 'image-editor'
 
   return (
     <div className="flex h-full bg-gray-50 overflow-hidden" style={{ contain: 'layout' }}>
@@ -31,7 +36,9 @@ export function AppLayout() {
           >
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <span className="font-semibold text-gray-900">AI Agent</span>
+          <span className="font-semibold text-gray-900">
+            {isImageEditor ? 'AI 智能改图' : 'AI Agent'}
+          </span>
         </div>
 
         <div className="hidden md:flex items-center px-4 py-2 border-b border-gray-200 bg-white flex-shrink-0">
@@ -41,10 +48,13 @@ export function AppLayout() {
           >
             <Menu size={18} />
           </button>
+          {isImageEditor && (
+            <span className="ml-3 text-sm font-medium text-gray-700">AI 智能改图</span>
+          )}
         </div>
 
         <div className="flex-1 min-h-0 overflow-hidden">
-          <ChatWindow />
+          {isImageEditor ? <EditorLayout /> : <ChatWindow />}
         </div>
       </div>
     </div>

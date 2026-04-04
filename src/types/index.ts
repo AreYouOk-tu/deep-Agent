@@ -1,9 +1,12 @@
+export type AgentType = 'chat' | 'image-editor'
+
 export interface Agent {
   id: string
   name: string
   avatar?: string
   description: string
   capabilities: string[]
+  type: AgentType
   createdAt: string
 }
 
