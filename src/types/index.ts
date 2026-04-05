@@ -19,6 +19,7 @@ export interface Message {
   content: string
   thinking?: string
   reasoning?: string
+  image?: string
   status?: MessageStatus
   error?: string
   timestamp: string

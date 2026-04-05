@@ -1,7 +1,10 @@
 import { useRef } from 'react'
 import { useChatStore } from '@/stores/chatStore'
 import { sendMessage } from '@/api/messages'
+import { generateImage } from '@/api/imageGen'
 import type { StreamEvent } from '@/types'
+
+const IMAGE_GEN_AGENT_ID = '1'
 
 export function useStreamChat() {
   const abortControllerRef = useRef<AbortController | null>(null)
@@ -31,6 +34,36 @@ export function useStreamChat() {
 
     setIsStreaming(true)
 
+    // 判断当前 agent 是否为"AI 智能生图"
+    const currentAgent = useChatStore.getState().currentAgent
+    if (currentAgent?.id === IMAGE_GEN_AGENT_ID) {
+      await handleImageGen(content)
+    } else {
+      await handleStreamChat(conversationId, content)
+    }
+  }
+
+  const handleImageGen = async (prompt: string) => {
+    try {
+      updateLastMessage({ content: '正在生成图片，请稍候...', status: 'reasoning' })
+      const result = await generateImage(prompt)
+      updateLastMessage({
+        content: `已生成图片\n\n**优化后的提示词：** ${result.optimized_prompt}`,
+        image: result.image_url,
+        status: 'done',
+      })
+    } catch (e) {
+      updateLastMessage({
+        error: e instanceof Error ? e.message : '图片生成失败，请稍后重试。',
+        status: 'error',
+      })
+    } finally {
+      setIsStreaming(false)
+      abortControllerRef.current = null
+    }
+  }
+
+  const handleStreamChat = async (conversationId: string, content: string) => {
     let thinkingAcc = ''
     let reasoningAcc = ''
     let contentAcc = ''
@@ -59,7 +92,7 @@ export function useStreamChat() {
     }
 
     try {
-      await sendMessage(conversationId, content, handleEvent, abortControllerRef.current.signal)
+      await sendMessage(conversationId, content, handleEvent, abortControllerRef.current!.signal)
     } catch (e) {
       if (e instanceof DOMException && e.name === 'AbortError') {
         updateLastMessage({ status: 'done' })

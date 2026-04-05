@@ -32,7 +32,7 @@ export function ImageUploader({ onImageLoad }: ImageUploaderProps) {
             <ImageIcon size={32} className="text-white" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">AI 智能改图</h2>
-          <p className="text-gray-500">上传一张图片，AI 将自动识别并拆分为可编辑的图层</p>
+          <p className="text-gray-500">上传一张图片，用自然语言告诉 AI 你想怎么修改</p>
         </div>
 
         <div

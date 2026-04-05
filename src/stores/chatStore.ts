@@ -16,7 +16,7 @@ interface ChatState {
   addConversation: (conversation: Conversation) => void
   setMessages: (messages: Message[]) => void
   addMessage: (message: Message) => void
-  updateLastMessage: (patch: Partial<Pick<Message, 'content' | 'thinking' | 'reasoning' | 'status' | 'error'>>) => void
+  updateLastMessage: (patch: Partial<Pick<Message, 'content' | 'thinking' | 'reasoning' | 'image' | 'status' | 'error'>>) => void
   setIsStreaming: (streaming: boolean) => void
 }
 
