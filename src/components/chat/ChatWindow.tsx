@@ -4,7 +4,7 @@ import { MessageList } from './MessageList'
 import { ChatInput } from './ChatInput'
 
 export function ChatWindow() {
-  const { currentAgent, currentConversation } = useChatStore()
+  const { currentAgent } = useChatStore()
 
   if (!currentAgent) {
     return <EmptyState icon="🤖" title="Select an agent" description="Choose an agent from the sidebar to start chatting" />

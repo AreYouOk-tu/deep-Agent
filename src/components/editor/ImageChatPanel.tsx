@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import type { KeyboardEvent } from 'react'
-import { Send, Loader2, AlertCircle, Paperclip, X, ImageIcon } from 'lucide-react'
+import { Send, Loader2, AlertCircle, Paperclip, X } from 'lucide-react'
 import { useEditorStore } from '@/stores/editorStore'
 import { editImage } from '@/api/fixImage'
 import { useAutoScroll } from '@/hooks/useAutoScroll'
@@ -22,7 +22,7 @@ export function ImageChatPanel() {
   const messages = useEditorStore((s) => s.messages)
   const currentImage = useEditorStore((s) => s.currentImage)
   const isProcessing = useEditorStore((s) => s.isProcessing)
-  const addUserMessage = useEditorStore((s) => s.addUserMessage)
+  // const addUserMessage = useEditorStore((s) => s.addUserMessage)
   const addAIMessage = useEditorStore((s) => s.addAIMessage)
   const updateAIMessage = useEditorStore((s) => s.updateAIMessage)
   const setProcessing = useEditorStore((s) => s.setProcessing)
