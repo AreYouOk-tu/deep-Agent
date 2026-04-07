@@ -48,7 +48,7 @@ export function useStreamChat() {
       updateLastMessage({ content: '正在生成图片，请稍候...', status: 'reasoning' })
       const result = await generateImage(prompt)
       updateLastMessage({
-        content: `已生成图片\n\n**优化后的提示词：** ${result.optimized_prompt}`,
+        content: `已生成图片\n\n`,
         image: result.image_url,
         status: 'done',
       })
